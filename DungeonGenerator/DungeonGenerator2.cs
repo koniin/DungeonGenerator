@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DungeonGenerator {
     /*
@@ -31,10 +32,32 @@ namespace DungeonGenerator {
         }
 
          
-        public Map CreateDungeon(int roomCount){
-            _openEnds = new List<Room>(roomCount*roomCount);
-            Map map = CreateRandomStartDungeon(roomCount, roomCount);
+        public Map CreateDungeon(int targetRoomCount){
+            _openEnds = new List<Room>();
+            Map map = CreateRandomStartDungeon(targetRoomCount / 2, targetRoomCount / 2);
             _openEnds.Add(map[map.StartX, map.StartY]);
+            int roomCount = 0;
+            while (roomCount < targetRoomCount){
+                Room currentRoom = _openEnds.ElementAt(_rand.Next(_openEnds.Count));
+                // Check so that we dont visit a visited room again
+                if (currentRoom.HasDoors)
+                    continue;
+
+                currentRoom.HasDoors = true;
+                _openEnds.Remove(currentRoom);
+                
+                // add all the rooms open neighbours to open ends
+                var neighbours = map.GetNeighbours(currentRoom);
+                _openEnds.AddRange(neighbours);
+
+                // create connections to all the rooms
+
+                // TODO: CREATE CONNECTIONS / DOORS
+
+                // repeat
+                
+                roomCount++;
+            }
             return map;
         }
 

@@ -9,7 +9,7 @@ namespace DungeonGenerator {
             MapDrawer.Draw(map);
 
             var d2 = new DungeonGenerator2();
-            map = d2.CreateDungeon(10);
+            map = d2.CreateDungeon(15);
             MapDrawer.Draw(map);
             Console.Read();
         }

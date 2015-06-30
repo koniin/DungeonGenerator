@@ -107,7 +107,7 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
         private void RemoveUnconnectedRooms(Map map) {
             for (int y = 0;y < map.Height;y++) {
                 for (int x = 0;x < map.Width;x++) {
-                    if (NeighbourCounter.Count(map, map[x, y]) == 0)
+                    if (MapExtensions.CountNeighbours(map, map[x, y]) == 0)
                         map[x, y] = new Room { X = x, Y = y };
                 }
             }
