@@ -41,7 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
+    <Compile Include="Door.cs" />
+    <Compile Include="DungeonGenerator2.cs" />
+    <Compile Include="NeighbourCounter.cs" />
+    <Compile Include="PathGenerator.cs" />
+    <Compile Include="Room.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MapDrawer.cs" />

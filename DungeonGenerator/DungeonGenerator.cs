@@ -31,44 +31,108 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
      * */
 
     public class DungeonGenerator {
-        public void CreateDungeon(){
+        private readonly Random _rand;
+        private readonly PathGenerator _pathGenerator;
+
+        public DungeonGenerator(){
+            _rand = new Random();
+            _pathGenerator = new PathGenerator();
+        }
+
+        public Map CreateDungeon(int width, int height) {
             Map map;
             while (true){
-                map = CreateRandomDungeon();
+                map = CreateRandomStartDungeon(width, height);
+                _pathGenerator.GeneratePathToEnd(map, 50);
                 if (map.ReachedEnd)
                     break;
             }
 
-            Console.WriteLine("Generated map with " + map.RoomsInPath + " rooms in path");
-            MapDrawer.Draw(map);
-
-            map = AddSideRooms(map);
-
-            Console.WriteLine("\nAdded side rooms");
-            MapDrawer.Draw(map);
-
-            map = AddDoors(map);
-            Console.WriteLine("\nAdded doors");
-            MapDrawer.Draw(map);
+            AddSideRooms(map);
+            AddDoors(map);
+            RemoveUnconnectedRooms(map);
+            return map;
         }
 
-        private Map CreateRandomDungeon() {
-            Random rand = new Random();
-            Map map = new Map(13, 11);
+        private Map CreateRandomStartDungeon(int width, int height) {
+            var map = new Map(width, height);
             map.SetEnd(6, 5);
-            map.SetStart(rand.Next(4));
-            map.GeneratePathToEnd(50);
+            SetRandomCornerStart(map, _rand.Next(4));
             return map;
         }
 
-        private Map AddSideRooms(Map map){
-            map.AddSideRooms(30);
-            return map;
+        private void AddSideRooms(Map map){
+            AddSideRooms(map, 30);
         }
 
-        private Map AddDoors(Map map){
-            map.AddDoors();
-            return map;
+        private void AddSideRooms(Map map, int probability) {
+            for (int y = 0;y < map.Height;y++) {
+                for (int x = 0;x < map.Width;x++) {
+                    if (map[x, y].Id == 0 && _rand.Next(100) < probability)
+                        map[x, y].Id = 88;
+                }
+            }
+        }
+
+        private void AddDoors(Map map) {
+            for (int y = 0;y < map.Height;y++) {
+                for (int x = 0;x < map.Width;x++) {
+                    if (map[x, y].Id != 0) {
+                        AddDoors(map, map[x, y]);
+                    }
+                }
+            }
+
+        }
+
+        private void AddDoors(Map map, Room room) {
+            if (room.X - 1 >= 0 && map[room.X - 1, room.Y].Id != 0) {
+                room.HasDoors = true;
+                room.AddDoor(map[room.X - 1, room.Y].Id, DoorPosition.Left);
+            }
+            if (room.X + 1 < map.Width && map[room.X + 1, room.Y].Id != 0) {
+                room.HasDoors = true;
+                room.AddDoor(map[room.X + 1, room.Y].Id, DoorPosition.Right);
+            }
+            if (room.Y - 1 >= 0 && map[room.X, room.Y - 1].Id != 0) {
+                room.HasDoors = true;
+                room.AddDoor(map[room.X, room.Y - 1].Id, DoorPosition.Top);
+            }
+            if (room.Y + 1 < map.Height && map[room.X, room.Y + 1].Id != 0) {
+                room.HasDoors = true;
+                room.AddDoor(map[room.X, room.Y + 1].Id, DoorPosition.Bottom);
+            }
+        }
+
+        private void RemoveUnconnectedRooms(Map map) {
+            for (int y = 0;y < map.Height;y++) {
+                for (int x = 0;x < map.Width;x++) {
+                    if (NeighbourCounter.Count(map, map[x, y]) == 0)
+                        map[x, y] = new Room { X = x, Y = y };
+                }
+            }
+        }
+
+        private void SetRandomCornerStart(Map map, int corner) {
+            switch (corner) {
+                case 0:
+                    map.StartX = 0;
+                    map.StartY = 0;
+                    break;
+                case 1:
+                    map.StartX = map.Width - 1;
+                    map.StartY = 0;
+                    break;
+                case 2:
+                    map.StartX = 0;
+                    map.StartY = map.Height - 1;
+                    break;
+                case 3:
+                    map.StartX = map.Width - 1;
+                    map.StartY = map.Height - 1;
+                    break;
+            }
+            map[map.StartX, map.StartY].Id = 1;
         }
     }
 }

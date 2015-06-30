@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DungeonGenerator {
     class Program {
         static void Main(string[] args) {
-            DungeonGenerator d = new DungeonGenerator();
-            d.CreateDungeon();
+            var d = new DungeonGenerator();
+            var map = d.CreateDungeon(13, 11);
+            Console.WriteLine(map.RoomsInPath);
+            MapDrawer.Draw(map);
+
+            var d2 = new DungeonGenerator2();
+            map = d2.CreateDungeon(10);
+            MapDrawer.Draw(map);
             Console.Read();
         }
     }
