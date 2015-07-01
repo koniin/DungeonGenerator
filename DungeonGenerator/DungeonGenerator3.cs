@@ -4,10 +4,12 @@ namespace DungeonGenerator {
     public class DungeonGenerator3 {
         private readonly Random _rand;
         private readonly PathGenerator _pathGenerator;
+        private DoorBuilder _doorBuilder;
 
         public DungeonGenerator3() {
             _rand = new Random();
             _pathGenerator = new PathGenerator();
+            _doorBuilder = new DoorBuilder();
         }
 
         public Map CreateDungeon(int width, int height) {
@@ -21,6 +23,8 @@ namespace DungeonGenerator {
 
             _pathGenerator.GeneratePathToEnd(map, 60);
             AddMulitpleSideRooms(map, 60);
+
+            _doorBuilder.AddDoors(map);
 
             return map;
         }

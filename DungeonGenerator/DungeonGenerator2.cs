@@ -26,9 +26,11 @@ namespace DungeonGenerator {
     public class DungeonGenerator2 {
         private readonly Random _rand;
         private List<Room> _openEnds;
+        private DoorBuilder _doorBuilder;
 
         public DungeonGenerator2(){
             _rand = new Random();
+            _doorBuilder = new DoorBuilder();
         }
 
          
@@ -58,6 +60,8 @@ namespace DungeonGenerator {
                 
                 roomCount++;
             }
+
+            _doorBuilder.AddDoors(map);
             return map;
         }
 
