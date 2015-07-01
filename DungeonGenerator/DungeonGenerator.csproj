@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Door.cs" />
     <Compile Include="DungeonGenerator2.cs" />
+    <Compile Include="DungeonGenerator3.cs" />
     <Compile Include="MapExtensions.cs" />
     <Compile Include="PathGenerator.cs" />
     <Compile Include="Room.cs" />

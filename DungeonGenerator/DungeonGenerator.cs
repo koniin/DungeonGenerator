@@ -58,7 +58,7 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
         private Map CreateRandomStartDungeon(int width, int height) {
             var map = new Map(width, height);
             map.SetEnd(6, 5);
-            SetRandomCornerStart(map, _rand.Next(4));
+            map.SetRandomCornerStart(_rand.Next(4));
             return map;
         }
 
@@ -122,28 +122,6 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
                 return true;
 
             return false;
-        }
-
-        private void SetRandomCornerStart(Map map, int corner) {
-            switch (corner) {
-                case 0:
-                    map.StartX = 0;
-                    map.StartY = 0;
-                    break;
-                case 1:
-                    map.StartX = map.Width - 1;
-                    map.StartY = 0;
-                    break;
-                case 2:
-                    map.StartX = 0;
-                    map.StartY = map.Height - 1;
-                    break;
-                case 3:
-                    map.StartX = map.Width - 1;
-                    map.StartY = map.Height - 1;
-                    break;
-            }
-            map[map.StartX, map.StartY].Id = 1;
         }
     }
 }

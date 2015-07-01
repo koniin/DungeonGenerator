@@ -11,10 +11,14 @@ namespace DungeonGenerator {
         }
 
         public void GeneratePathToEnd(Map map, int maxIterations) {
+            GeneratePathToEnd(map, maxIterations, map[map.StartX, map.StartY]);
+        }
+
+        public void GeneratePathToEnd(Map map, int maxIterations, Room startRoom) {
+            Room room = startRoom;
+
             int counter = 2;
             int iteration = 0;
-            Room room = map[map.StartX, map.StartY];
-
             while (iteration < maxIterations) {
                 IEnumerable<Room> neighbours = map.GetNeighbours(room);
                 if (neighbours.Any(n => n.X == map.EndX && n.Y == map.EndY)) {

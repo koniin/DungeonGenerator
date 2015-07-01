@@ -35,5 +35,27 @@ namespace DungeonGenerator {
                 neighbours.Add(map[room.X, room.Y + 1]);
             return neighbours;
         }
+
+        public static void SetRandomCornerStart(this Map map, int corner) {
+            switch (corner) {
+                case 0:
+                    map.StartX = 0;
+                    map.StartY = 0;
+                    break;
+                case 1:
+                    map.StartX = map.Width - 1;
+                    map.StartY = 0;
+                    break;
+                case 2:
+                    map.StartX = 0;
+                    map.StartY = map.Height - 1;
+                    break;
+                case 3:
+                    map.StartX = map.Width - 1;
+                    map.StartY = map.Height - 1;
+                    break;
+            }
+            map[map.StartX, map.StartY].Id = 1;
+        }
     }
 }
