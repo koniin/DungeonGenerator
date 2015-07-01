@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DungeonGenerator {
     /*
@@ -43,7 +44,7 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
             Map map;
             while (true){
                 map = CreateRandomStartDungeon(width, height);
-                _pathGenerator.GeneratePathToEnd(map, 50);
+                _pathGenerator.GeneratePathToEnd(map, 60);
                 if (map.ReachedEnd)
                     break;
             }
@@ -103,14 +104,24 @@ https://sv.wikipedia.org/wiki/Prims_algoritm
                 room.AddDoor(map[room.X, room.Y + 1].Id, DoorPosition.Bottom);
             }
         }
-
+        
         private void RemoveUnconnectedRooms(Map map) {
-            for (int y = 0;y < map.Height;y++) {
-                for (int x = 0;x < map.Width;x++) {
-                    if (MapExtensions.CountNeighbours(map, map[x, y]) == 0)
+            for (int y = 0; y < map.Height; y++) {
+                for (int x = 0; x < map.Width; x++) {
+                    if (map.CountNeighbours(map[x, y]) == 0)
+                        map[x, y] = new Room { X = x, Y = y };
+                    else if (RoomHasOnlySideRoomConnections(map, map[x, y]))
                         map[x, y] = new Room { X = x, Y = y };
                 }
             }
+        }
+
+        private bool RoomHasOnlySideRoomConnections(Map map, Room room) {
+            var neighbours = map.GetNeighbours(room);
+            if (room.Id == 88 && neighbours.All(n => n.Id == 88 || n.Id == 0))
+                return true;
+
+            return false;
         }
 
         private void SetRandomCornerStart(Map map, int corner) {

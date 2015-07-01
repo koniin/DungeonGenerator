@@ -12,7 +12,10 @@ namespace DungeonGenerator{
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
                     else if (map[x, y].HasDoors){
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        if (map[x, y].Id == 88)
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                        else
+                            Console.ForegroundColor = ConsoleColor.Green;
                     }
                     Console.Write(map[x, y].Id.ToString().PadLeft(4));
                     Console.ForegroundColor = ConsoleColor.White;
